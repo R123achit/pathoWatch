@@ -1,0 +1,8 @@
+{
+  "buildCommand": "npm run prisma:generate && next build",
+  "framework": "nextjs",
+  "env": [
+    "DATABASE_URL"
+  ]
+}
+
