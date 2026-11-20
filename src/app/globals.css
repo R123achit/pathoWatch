@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Manrope:wght@600;700&family=Courier+Prime&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(15, 76, 129, 0.1);
+  box-shadow: 0 4px 24px -1px rgba(15, 76, 129, 0.08);
+}
+
+.map-bg {
+  background-color: #f0f3ff;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10h80v80h-80z' fill='none' stroke='%23d8e3fb' stroke-width='1'/%3E%3Cpath d='M30 30c5-5 15-5 20 0s15 15 20 5 10-15 15-10M10 50c10 5 20-5 30 0s15 20 25 15 15-10 25-5M20 70c15-10 25 5 35 0s15-15 25-5' fill='none' stroke='%23cfdaf2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+.map-marker {
+  animation: pulse 2s infinite;
+}
+
+.sparkline {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw 1.5s ease-out forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    opacity: 0.8;
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+

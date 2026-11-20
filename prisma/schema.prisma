@@ -1,0 +1,114 @@
+// This is your Prisma schema file for PathoWatch AMR Surveillance System
+// Academic prototype for final year project
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Geographic Areas (Districts/Regions being monitored)
+model Area {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  district  String
+  state     String
+  latitude  Float?
+  longitude Float?
+  geojson   String?  @db.Text // Store GeoJSON polygon as text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  facilities Facility[]
+  amrRecords AmrRecord[]
+  alerts     SurveillanceAlert[]
+
+  @@index([district, state])
+}
+
+// Healthcare Facilities (Hospitals and Laboratories)
+model Facility {
+  id            String   @id @default(cuid())
+  name          String
+  type          String   // 'hospital' or 'laboratory'
+  areaId        String
+  apiIdentifier String   @unique // Used for fake API endpoints
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  area      Area        @relation(fields: [areaId], references: [id])
+  amrRecords AmrRecord[]
+  syncLogs   SyncLog[]
+
+  @@index([areaId])
+  @@index([type])
+  @@index([isActive])
+}
+
+// AMR Surveillance Records
+model AmrRecord {
+  id                   String   @id @default(cuid())
+  externalRecordId     String   // Record ID from source system
+  facilityId           String
+  areaId               String
+  reportDate           DateTime
+  pathogen             String   // Normalized pathogen name
+  sampleType           String
+  antimicrobial        String
+  susceptibilityResult String   // 'Resistant', 'Sensitive', 'Intermediate'
+  sourceType           String   // 'hospital' or 'laboratory'
+  syncedAt             DateTime @default(now())
+  createdAt            DateTime @default(now())
+
+  facility Facility @relation(fields: [facilityId], references: [id])
+  area     Area     @relation(fields: [areaId], references: [id])
+
+  @@unique([externalRecordId, facilityId]) // Prevent duplicates
+  @@index([areaId, reportDate])
+  @@index([facilityId])
+  @@index([reportDate])
+  @@index([susceptibilityResult])
+  @@index([pathogen])
+}
+
+// Data Synchronization Logs
+model SyncLog {
+  id                String    @id @default(cuid())
+  sourceFacilityId  String?
+  syncStartedAt     DateTime  @default(now())
+  syncCompletedAt   DateTime?
+  recordsReceived   Int       @default(0)
+  recordsAdded      Int       @default(0)
+  recordsSkipped    Int       @default(0)
+  status            String    // 'running', 'completed', 'failed'
+  errorMessage      String?   @db.Text
+  createdAt         DateTime  @default(now())
+
+  sourceFacility Facility? @relation(fields: [sourceFacilityId], references: [id])
+
+  @@index([syncStartedAt])
+  @@index([status])
+}
+
+// Rule-Based Surveillance Alerts
+model SurveillanceAlert {
+  id         String   @id @default(cuid())
+  areaId     String
+  alertType  String   // 'growth_spike', 'new_pathogen', 'threshold_exceeded'
+  severity   String   // 'Low', 'Moderate', 'High'
+  message    String   @db.Text
+  detectedAt DateTime @default(now())
+  status     String   @default("active") // 'active', 'acknowledged', 'resolved'
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  area Area @relation(fields: [areaId], references: [id])
+
+  @@index([areaId])
+  @@index([severity])
+  @@index([status])
+  @@index([detectedAt])
+}
