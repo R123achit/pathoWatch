@@ -1,15 +1,4 @@
 {
   "buildCommand": "npm run prisma:generate && next build",
-  "framework": "nextjs",
-  "env": {
-    "DATABASE_URL": {
-      "required": false
-    },
-    "PATHOWATCH_ML_API_URL": {
-      "required": true
-    },
-    "PATHOWATCH_ML_API_KEY": {
-      "required": true
-    }
-  }
+  "framework": "nextjs"
 }
