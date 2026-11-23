@@ -10,6 +10,8 @@
 import { NextResponse } from 'next/server';
 import { syncAllFacilities } from '@/lib/syncService';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request) {
   try {
     console.log('🔄 Starting data synchronization...');

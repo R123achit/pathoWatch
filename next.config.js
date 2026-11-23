@@ -8,6 +8,12 @@ const nextConfig = {
       },
     ],
   },
+  // Disable static generation for API routes
+  experimental: {
+    isrMemoryCacheSize: 0,
+  },
+  // Prevent Next.js from trying to prerender API routes
+  staticPageGenerationTimeout: 0,
 };
 
 module.exports = nextConfig;

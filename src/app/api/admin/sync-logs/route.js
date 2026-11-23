@@ -1,12 +1,13 @@
 /**
- * Sync Logs API
- * Returns history of data synchronization operations
+ * GET /api/admin/sync-logs
  * 
- * GET /api/admin/sync-logs?limit=20
+ * Returns history of data synchronization operations
  */
 
 import { NextResponse } from 'next/server';
 import { getRecentSyncLogs } from '@/lib/syncService';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
   try {
@@ -39,3 +40,4 @@ export async function GET(request) {
     }, { status: 500 });
   }
 }
+
